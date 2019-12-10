@@ -101,13 +101,20 @@ class Graph:
         q = Queue()
         q.enqueue(starting_vertex)
         visited = set()
-        print("BFT")
+        shortest = []
+        print("BFS", self.vertices)
         while q.size() > 0:
             v = q.dequeue()
             if v not in visited:
+                # Same code instead of printing we check if the dequeued item is our destination
                 print(v)
+                if v is destination_vertex:
+                    print("This is it", visited)
+                    return visited
                 visited.add(v)
                 for neighbor in self.vertices[v]:
+                    print("shortest", neighbor)
+                    shortest.append(neighbor)
                     q.enqueue(neighbor)
 
 
@@ -181,6 +188,7 @@ if __name__ == '__main__':
         1, 2, 4, 6, 3, 5, 7
     '''
     graph.dft(1)
+    print("DFT RECURSIVE")
     graph.dft_recursive(1)
 
     '''
