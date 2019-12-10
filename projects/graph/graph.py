@@ -87,7 +87,7 @@ class Graph:
         #     return  
         if visited == None:
             visited = set()
-        print(starting_vertex)
+        # print(starting_vertex)
         visited.add(starting_vertex)
         for neightbor in self.get_neighbors(starting_vertex):
             if neightbor not in visited:
