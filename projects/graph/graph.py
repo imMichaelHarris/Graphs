@@ -29,7 +29,7 @@ class Graph:
         """
         Get all neighbors (edges) of a vertex.
         """
-        pass  # TODO
+        return self.vertices[vertex_id]
 
     def bft(self, starting_vertex):
         """
@@ -75,7 +75,7 @@ class Graph:
                     s.push(neighbor)
 
 
-    def dft_recursive(self, starting_vertex):
+    def dft_recursive(self, starting_vertex, visited=None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
@@ -83,12 +83,19 @@ class Graph:
         This should be done using recursion.
         """
         # Make base case - return when starting_vertex is already in cache
-        if starting_vertex in self.cache:
-            return  
+        # if starting_vertex in self.cache:
+        #     return  
+        if visited == None:
+            visited = set()
         print(starting_vertex)
-        for neightbor in self.vertices[starting_vertex]:
-            self.cache.add(starting_vertex)
-            self.dft_recursive(neightbor)
+        visited.add(starting_vertex)
+        for neightbor in self.get_neighbors(starting_vertex):
+            if neightbor not in visited:
+                self.dft_recursive(neightbor, visited)
+
+        # for neightbor in self.vertices[starting_vertex]:
+        #     self.cache.add(starting_vertex)
+        #     self.dft_recursive(neightbor)
 
         
 
