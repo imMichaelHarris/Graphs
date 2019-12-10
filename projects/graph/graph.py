@@ -146,7 +146,7 @@ class Graph:
                 new_path.append(neighbor)
                 s.push(new_path)
 
-    def dfs_recursive(self, starting_vertex, destination_vertex):
+    def dfs_recursive(self, starting_vertex, destination_vertex, visited=None, path=None):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -154,18 +154,37 @@ class Graph:
 
         This should be done using recursion.
         """
-        print("DFS RECURSION")
-        if starting_vertex in self.cache:
-            return  
-        vertex = starting_vertex[-1]
-        if starting_vertex is destination_vertex:
-            return starting_vertex
-        print(vertex)
-        self.cache.add(vertex)
-        for neightbor in self.vertices[vertex]:
-            new_path = list(starting_vertex)
-            new_path.append(neightbor)
-            self.dft_recursive(new_path)
+        if visited is None:
+            visited = set()
+        # Init path
+        if path is None:
+            path = []
+        visited.add(starting_vertex)
+        # Add vertex to the path
+        path = path + [starting_vertex]
+        # If we are at the target value, return the path
+        if starting_vertex == destination_vertex:
+            print("DFS RECURSIVE")
+            return path
+        # Otherwise, call DFS_recursive on each unvisited neighbor
+        for neighbor in self.get_neighbors(starting_vertex):
+            if neighbor not in visited:
+                new_path = self.dfs_recursive(neighbor, destination_vertex, visited, path)
+                if new_path is not None:
+                    return new_path
+        return None
+        # print("DFS RECURSION")
+        # if starting_vertex in self.cache:
+        #     return  
+        # vertex = starting_vertex[-1]
+        # if starting_vertex is destination_vertex:
+        #     return starting_vertex
+        # print(vertex)
+        # self.cache.add(vertex)
+        # for neightbor in self.vertices[vertex]:
+        #     new_path = list(starting_vertex)
+        #     new_path.append(neightbor)
+        #     self.dft_recursive(new_path)
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
