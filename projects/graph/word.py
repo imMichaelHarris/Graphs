@@ -69,9 +69,6 @@ def get_neighbors(word):
                 neighbors.append(w)
     return neighbors
 ​
-​
-​
-​
 def find_ladders(begin_word, end_word):
     # DO BFS
     # Create a queue
