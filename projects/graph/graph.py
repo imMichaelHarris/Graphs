@@ -99,23 +99,21 @@ class Graph:
         breath-first order.
         """
         q = Queue()
-        q.enqueue(starting_vertex)
+        q.enqueue([starting_vertex])
         visited = set()
-        shortest = []
-        print("BFS", self.vertices)
+        print("BFS")
         while q.size() > 0:
             v = q.dequeue()
-            if v not in visited:
-                # Same code instead of printing we check if the dequeued item is our destination
-                print(v)
-                if v is destination_vertex:
-                    print("This is it", visited)
-                    return visited
-                visited.add(v)
-                for neighbor in self.vertices[v]:
-                    print("shortest", neighbor)
-                    shortest.append(neighbor)
-                    q.enqueue(neighbor)
+            vertex = v[-1]
+            if vertex not in visited:
+                if vertex is destination_vertex:
+                    return v
+                visited.add(vertex)
+            for neighbor in self.vertices[vertex]:
+                new_path = list(v)
+                new_path.append(neighbor)
+                q.enqueue(new_path)
+            
 
 
     def dfs(self, starting_vertex, destination_vertex):
@@ -124,9 +122,24 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        s = Stack()
+        s.push([starting_vertex])
+        # Create an empty set to store visited vertices
+        visited = set()
+        print("DFS")
+        while s.size() > 0:
+            v = s.pop()
+            vertex = v[-1]
+            if vertex not in visited:
+                if vertex is destination_vertex:
+                    return v
+                visited.add(vertex)
+            for neighbor in self.vertices[vertex]:
+                new_path = list(v)
+                new_path.append(neighbor)
+                s.push(new_path)
 
-    def dfs_recursive(self, starting_vertex):
+    def dfs_recursive(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -134,7 +147,18 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        print("DFS RECURSION")
+        if starting_vertex in self.cache:
+            return  
+        vertex = starting_vertex[-1]
+        if starting_vertex is destination_vertex:
+            return starting_vertex
+        print(vertex)
+        self.cache.add(vertex)
+        for neightbor in self.vertices[vertex]:
+            new_path = list(starting_vertex)
+            new_path.append(neightbor)
+            self.dft_recursive(new_path)
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
@@ -202,5 +226,5 @@ if __name__ == '__main__':
         [1, 2, 4, 6]
         [1, 2, 4, 7, 6]
     '''
-    # print(graph.dfs(1, 6))
-    # print(graph.dfs_recursive(1, 6))
+    print(graph.dfs(1, 6))
+    print(graph.dfs_recursive(1, 6))
