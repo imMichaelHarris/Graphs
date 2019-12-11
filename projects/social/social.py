@@ -1,8 +1,11 @@
-
+import random
+import collections
 
 class User:
     def __init__(self, name):
         self.name = name
+    def __repr__(self):
+        return self.name
 
 class SocialGraph:
     def __init__(self):
@@ -30,7 +33,7 @@ class SocialGraph:
         self.users[self.last_id] = User(name)
         self.friendships[self.last_id] = set()
 
-    def populate_graph(self, numUsers, avgFriendships):
+    def populate_graph(self, num_users, avg_friendships):
         """
         Takes a number of users and an average number of friendships
         as arguments
@@ -47,8 +50,20 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
+        for i in range(num_users):
+            self.add_user(f"User {i+ 1}")
 
-        # Create friendships
+        possible_friendships = []
+        for user_id in self.users:
+            for friend_id in range(user_id + 1, self.last_id + 1):
+                possible_friendships.append((user_id, friend_id))
+
+        random.shuffle(possible_friendships)
+        print(possible_friendships)
+
+        for i in range(num_users * avg_friendships // 2):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
 
     def get_all_social_paths(self, user_id):
         """
@@ -61,12 +76,32 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+                q = Queue()
+        q.enqueue(starting_vertex)
+        # Create an empty set to store visited vertices
+        visited = set()
+        # While the queue is not empty 
+        print("BFT")
+        while q.size() > 0:
+        #   dequeue the first vertex
+            v = q.dequeue()
+        #   If that vertex hasn't been visited..
+            if v not in visited:
+                print(v)
+        #       Mark as visited
+                visited.add(v)
+        #       Then add all of it's neighbors to back of the queue
+                for neighbor in self.vertices[v]:
+                    q.enqueue(neighbor)
+
         return visited
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populate_graph(10, 2)
+    print(sg.users)
+    print("----------")
     print(sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
