@@ -59,7 +59,6 @@ class SocialGraph:
                 possible_friendships.append((user_id, friend_id))
 
         random.shuffle(possible_friendships)
-        print(possible_friendships)
 
         for i in range(num_users * avg_friendships // 2):
             friendship = possible_friendships[i]
@@ -76,23 +75,26 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
-                q = Queue()
-        q.enqueue(starting_vertex)
+        q = collections.deque()
+        q.appendleft([user_id])
         # Create an empty set to store visited vertices
-        visited = set()
         # While the queue is not empty 
         print("BFT")
-        while q.size() > 0:
+        while len(q) > 0:
         #   dequeue the first vertex
-            v = q.dequeue()
+            user = q.pop()
+            new_user = user[-1]
         #   If that vertex hasn't been visited..
-            if v not in visited:
-                print(v)
+            if new_user not in visited:
+                # print("User", user)
         #       Mark as visited
-                visited.add(v)
+                visited[new_user] =  user
         #       Then add all of it's neighbors to back of the queue
-                for neighbor in self.vertices[v]:
-                    q.enqueue(neighbor)
+                for friend in self.friendships[new_user]:
+                    if friend not in visited:
+                        new_path = list(user)
+                        new_path.append(friend)
+                        q.appendleft(new_path)
 
         return visited
 
@@ -100,7 +102,7 @@ class SocialGraph:
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populate_graph(10, 2)
-    print(sg.users)
+    # print(sg.users)
     print("----------")
     print(sg.friendships)
     connections = sg.get_all_social_paths(1)
