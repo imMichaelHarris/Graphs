@@ -33,7 +33,7 @@ Return the fartest which sounds like a depth first traversal but need to go up n
 
 the_list = [(1,3), (2,3), (3,6), (5,6), (5,7), (4,5), (4,8), (8,9), (11,8), (10,1)]
 
-def earliest_ancestor(ancestors, starting_node, visited=None, path=None):
+def earliest_ancestor(ancestors, starting_node):
     # Do a DFT with the starting node for a start think might have to reverse it - hmmm if we only check if the node is the second item of tuple dft should be fine
     # Get neighbors of the starting node
     # Loop through and find the tuple(s) that have the starting node ad the second item
@@ -41,31 +41,64 @@ def earliest_ancestor(ancestors, starting_node, visited=None, path=None):
     # If the starting node has been visted move on
     # Base case will be when there is no tuple with the starting node in it's second index
 
-    if visited == None:
-        visited = set()
+    my_graph = Graph()
 
-    if path is None:
-        path = []
-    # print("start", path, visited)
-    # visited.add(starting_node)
-    new_path = path + [starting_node]
+    for i in ancestors:
+        my_graph.add_vertex(i[0])
+        my_graph.add_vertex(i[1])
+        my_graph.add_edge(i[1], i[0])
+
+    q = Queue()
+    q.enqueue([starting_node])
+    
+    while q.size() > 0:
+        max_path = 1
+        ancestor = -1
+        path = q.dequeue()
+        vertex = path[-1]
+        if (len(path) >= max_path and vertex < ancestor) or (len(path) > max_path):
+            ancestor = vertex
+            max_path = len(path)
+            
+
+        for neighbor in my_graph.vertices[vertex]:
+            new_path = list(v)
+            new_path.append(neighbor)
+            q.enqueue(new_path)
+        
+        return ancestor
+            
+    # print("start", starting_node, path, visited)
+    # # visited.add(starting_node)
+    # new_path = path + [starting_node]
     # print("paths", path, new_path)
-    if new_path > path:
-        # print("bigger")
-        path = new_path
-    else:
-        return path
-    for i in range(len(ancestors)):
-        # print(ancestors[i])
-        if ancestors[i][1] == starting_node:
-            # print("Found", ancestors[i][0], ancestors[i])
-            if ancestors[i] not in visited:
-            # path = list([ancestors[i]])
-                # print("path",path)
-                path.append(ancestors[i][0])
-                visited.add(ancestors[i])
-                new_path = earliest_ancestor(ancestors, ancestors[i][0], visited, path)
-                return new_path
+    # if len(new_path) > max_path:
+    #     # print("bigger")
+    #     path = new_path
+    #     max_path = len(new_path)
+    # else:
+    #     print("first else")
+    #     return path
+    # for i in range(len(ancestors)):
+    #     # print(ancestors[i])
+    #     if ancestors[i][1] == starting_node:
+    #         # print("Found", ancestors[i][0], ancestors[i])
+    #         if ancestors[i][1] not in visited:
+    #         # path = list([ancestors[i]])
+    #             # print("path",path)
+    #             # path.append(ancestors[i][0])
+    #             visited.add(ancestors[i][1])
+    #             new_path = earliest_ancestor(ancestors, ancestors[i][0], visited, path)
+    #             if new_path is None:
+    #                 if max_path 
+    #                 print("here", starting_node, "path: ", path, ancestors[i][0])
+    #                 return
+                    
+    
+                
+            # else:
+            #     print("else")
+            #     return starting_node
 
         # print(starting_vertex)
     # for neightbor in self.get_neighbors(starting_vertex):
@@ -73,4 +106,4 @@ def earliest_ancestor(ancestors, starting_node, visited=None, path=None):
     #         self.dft_recursive(neightbor, visited)/
 
     
-earliest_ancestor(the_list, 3)
+print(earliest_ancestor(the_list, 6))
